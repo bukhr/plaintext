@@ -44,7 +44,7 @@ module Plaintext
             uri == @namespace_uri and
             @is_text
 
-          @text << ' '
+          @text += "\n"
           @is_text = false
         end
       end
