@@ -62,13 +62,7 @@ module Plaintext
     end
 
     def read(io, max_size = nil)
-      piece = io.read(max_size)
-
-      if utf8_stream?
-        piece
-      else
-        Plaintext::CodesetUtil.to_utf8 piece, DEFAULT_STREAM_ENCODING
-      end
+      io.read(max_size)
     end
   end
 end
