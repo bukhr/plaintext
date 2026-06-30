@@ -13,13 +13,13 @@ describe Plaintext::PptxHandler do
     expect(subject.text(file)).to match /Slide two/
 
     expect(Plaintext::Resolver.new(file, 'application/vnd.openxmlformats-officedocument.presentationml.presentation').text).to(
-        match /The Title find me Slide two/
+        match /The Title\s+find me\s+Slide two/
     )
     expect(Plaintext::Resolver.new(file, 'application/vnd.openxmlformats-officedocument.presentationml.slideshow').text).to(
-        match /The Title find me Slide two/
+        match /The Title\s+find me\s+Slide two/
     )
     expect(Plaintext::Resolver.new(file, 'application/vnd.ms-powerpoint.template.macroEnabled.12').text).to(
-        match /The Title find me Slide two/
+        match /The Title\s+find me\s+Slide two/
     )
   end
 

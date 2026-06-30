@@ -9,10 +9,10 @@ describe Plaintext::Resolver do
   end
   let(:handler) { resolver.send(:find_handler) }
 
-  it 'squishes and strips the text returned by the handler' do
+  it 'does not squish or strip the text returned by the handler (Buk custom)' do
     allow(handler).to receive(:text).and_return("  hello \n \n world! ")
 
-    expect(resolver.text).to eq("hello world!")
+    expect(resolver.text).to eq("  hello \n \n world! ")
   end
 
   it 'returns nil if the handler returns nil' do

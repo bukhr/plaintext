@@ -13,7 +13,7 @@ describe Plaintext::DocxHandler do
       match /lorem ipsum/
     )
     expect(Plaintext::Resolver.new(file, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document').text).to(
-      match /lorem ipsum fulltext find me!/
+      match /lorem ipsum\s+fulltext\s+find\s+me!/
     )
   end
 
