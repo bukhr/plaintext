@@ -3,7 +3,7 @@
 module Plaintext
 
   class PlaintextHandler < FileHandler
-    CONTENT_TYPES = %w(text/csv text/plain)
+    CONTENT_TYPES = %w(text/csv text/plain text/markdown)
     def initialize
       @content_types = CONTENT_TYPES
     end
