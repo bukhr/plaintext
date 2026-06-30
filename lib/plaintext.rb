@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'active_support/core_ext/string'
+require 'active_support/core_ext/object/blank'
 
 require 'plaintext/version'
 require 'plaintext/configuration'
@@ -12,6 +13,7 @@ require 'plaintext/file_handler/external_command_handler'
 require 'plaintext/file_handler/external_command_handler/doc_handler'
 require 'plaintext/file_handler/external_command_handler/image_handler'
 require 'plaintext/file_handler/external_command_handler/pdf_handler'
+require 'plaintext/pdf_url_extractor'
 require 'plaintext/file_handler/external_command_handler/ppt_handler'
 require 'plaintext/file_handler/external_command_handler/rtf_handler'
 require 'plaintext/file_handler/external_command_handler/xls_handler'
