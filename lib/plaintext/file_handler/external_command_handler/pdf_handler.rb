@@ -9,12 +9,7 @@ module Plaintext
     def initialize
       @content_type = 'application/pdf'
       @command = Plaintext::Configuration['pdftotext'] || DEFAULT
-    end
-
-    protected
-
-    def utf8_stream?
-      true
+      @stream_encoding = Plaintext::Configuration['pdftotext_encoding'] || 'UTF-8'
     end
   end
 end

@@ -13,6 +13,7 @@ module Plaintext
     def initialize
       @content_types = CONTENT_TYPES
       @command = Plaintext::Configuration['tesseract'] || DEFAULT
+      @stream_encoding = Plaintext::Configuration['tesseract_encoding']
     end
   end
 end

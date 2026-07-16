@@ -58,6 +58,25 @@ end
 
 Please overwrite `Plaintext::Configuration.load`.
 
+#### Output encoding
+
+The output of each command is read as `ASCII-8BIT` and converted to UTF-8 by
+replacing any non-ASCII byte (the exception is `pdftotext`, which is invoked
+with `-enc UTF-8` and read as UTF-8). If your command already emits UTF-8 —
+like the default `catdoc -dutf-8`, `xls2csv -dutf-8` and `catppt -dutf-8` do —
+you can declare it with the `<command>_encoding` setting to keep accented
+characters intact instead of having them replaced by question marks:
+
+```yml
+catdoc_encoding: UTF-8
+xls2csv_encoding: UTF-8
+catppt_encoding: UTF-8
+```
+
+Any encoding name known to Ruby is accepted and will be converted to UTF-8,
+e.g. `catdoc_encoding: ISO-8859-1`. When not set, the previous behavior is
+kept for backwards compatibility.
+
 ### Linux
 
 On linux the default configuration should work. However, make sure that the following packages are installed

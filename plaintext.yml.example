@@ -39,3 +39,15 @@
 #   - /usr/bin/tesseract
 #   - -dutf-8
 #   - __FILE__
+
+# Encoding of the output of each command. Defaults to ASCII-8BIT (any
+# non-ASCII byte is replaced by a question mark), except for pdftotext
+# which defaults to UTF-8. Declare UTF-8 if your command already emits
+# UTF-8 (like the default catdoc/xls2csv/catppt invocations above) to
+# keep non-ASCII characters intact.
+# catdoc_encoding: UTF-8
+# xls2csv_encoding: UTF-8
+# catppt_encoding: UTF-8
+# unrtf_encoding: UTF-8
+# tesseract_encoding: UTF-8
+# pdftotext_encoding: UTF-8

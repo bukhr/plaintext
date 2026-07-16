@@ -12,6 +12,7 @@ module Plaintext
     def initialize
       @content_types = CONTENT_TYPES
       @command = Plaintext::Configuration['xls2csv'] || DEFAULT
+      @stream_encoding = Plaintext::Configuration['xls2csv_encoding']
     end
     def text(*_)
       if str = super

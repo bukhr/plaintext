@@ -15,6 +15,12 @@ module Plaintext
     FILE_PLACEHOLDER = '__FILE__'.freeze
     DEFAULT_STREAM_ENCODING = 'ASCII-8BIT'.freeze
 
+    attr_writer :stream_encoding
+
+    def stream_encoding
+      @stream_encoding || DEFAULT_STREAM_ENCODING
+    end
+
     def shellout(cmd, options = {}, &block)
       mode = "r+"
       IO.popen(cmd, mode) do |io|
@@ -46,7 +52,7 @@ module Plaintext
     protected
 
     def utf8_stream?
-      false
+      stream_encoding.casecmp('UTF-8').zero?
     end
 
     private
@@ -54,11 +60,7 @@ module Plaintext
     def set_stream_encoding(io)
       return unless io.respond_to?(:set_encoding)
 
-      if utf8_stream?
-        io.set_encoding('UTF-8'.freeze)
-      else
-        io.set_encoding(DEFAULT_STREAM_ENCODING)
-      end
+      io.set_encoding(stream_encoding)
     end
 
     def read(io, max_size = nil)
@@ -67,7 +69,7 @@ module Plaintext
       if utf8_stream?
         piece
       else
-        Plaintext::CodesetUtil.to_utf8 piece, DEFAULT_STREAM_ENCODING
+        Plaintext::CodesetUtil.to_utf8 piece, stream_encoding
       end
     end
   end

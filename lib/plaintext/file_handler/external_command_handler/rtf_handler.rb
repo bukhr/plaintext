@@ -8,6 +8,7 @@ module Plaintext
     def initialize
       @content_type = 'application/rtf'
       @command = Plaintext::Configuration['unrtf'] || DEFAULT
+      @stream_encoding = Plaintext::Configuration['unrtf_encoding']
     end
 
     private
@@ -29,7 +30,7 @@ module Plaintext
             line[0,max_size]
           end
         end
-        Plaintext::CodesetUtil.to_utf8 string, "ASCII-8BIT"
+        utf8_stream? ? string : Plaintext::CodesetUtil.to_utf8(string, stream_encoding)
       end
     end
   end

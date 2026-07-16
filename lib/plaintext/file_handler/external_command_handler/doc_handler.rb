@@ -12,6 +12,7 @@ module Plaintext
     def initialize
       @content_types = CONTENT_TYPES
       @command = Plaintext::Configuration['catdoc'] || DEFAULT
+      @stream_encoding = Plaintext::Configuration['catdoc_encoding']
     end
   end
 end

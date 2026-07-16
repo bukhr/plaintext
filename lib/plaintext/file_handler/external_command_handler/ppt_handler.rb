@@ -12,6 +12,7 @@ module Plaintext
     def initialize
       @content_types = CONTENT_TYPES
       @command = Plaintext::Configuration['catppt'] || DEFAULT
+      @stream_encoding = Plaintext::Configuration['catppt_encoding']
     end
   end
 end
