@@ -3,86 +3,83 @@
 require 'spec_helper'
 
 describe Plaintext::OpendocumentHandler do
-
   subject { described_class.new }
-  
+
   it 'Should accept a path string as input' do
     file = 'spec/fixtures/files/text.odt'
-    expect(subject.text(file)).to match /lorem ipsum/
+    expect(subject.text(file).split.join(' ')).to include('lorem ipsum')
   end
 
   it 'Should accept a pathname as input' do
     file = Pathname('spec/fixtures/files/text.odt')
-    expect(subject.text(file)).to match /lorem ipsum/
+    expect(subject.text(file).split.join(' ')).to include('lorem ipsum')
   end
 
   it 'Should extract text from .odt files' do
     file = File.new('spec/fixtures/files/text.odt', 'r')
 
-    expect(subject.text(file)).to match /lorem ipsum/
-    expect(Plaintext::Resolver.new(file, 'application/vnd.oasis.opendocument.text').text).to(
-        match /lorem ipsum fulltext find me!/
-    )
+    expect(subject.text(file).split.join(' ')).to include('lorem ipsum')
+    
+    resolver = Plaintext::Resolver.new(file, 'application/vnd.oasis.opendocument.text')
+    expect(resolver.text.split.join(' ')).to include('lorem ipsum fulltext find me!')
   end
 
   it 'Should extract text from .ott files' do
     file = File.new('spec/fixtures/files/text.ott', 'r')
 
-    expect(subject.text(file)).to match /lorem ipsum/
-    expect(Plaintext::Resolver.new(file, 'application/vnd.oasis.opendocument.text-template').text).to(
-        match /lorem ipsum fulltext find me!/
-    )
+    expect(subject.text(file).split.join(' ')).to include('lorem ipsum')
+    
+    resolver = Plaintext::Resolver.new(file, 'application/vnd.oasis.opendocument.text-template')
+    expect(resolver.text.split.join(' ')).to include('lorem ipsum fulltext find me!')
   end
 
   it 'Should extract text from .odp files' do
     file = File.new('spec/fixtures/files/presentation.odp', 'r')
 
-    expect(subject.text(file)).to match /The Title find me Slide two Click To Add Text/
-    expect(Plaintext::Resolver.new(file, 'application/vnd.oasis.opendocument.presentation').text).to(
-        match /The Title find me Slide two/
-    )
+    expect(subject.text(file).split.join(' ')).to include('The Title find me Slide two Click To Add Text')
+    
+    resolver = Plaintext::Resolver.new(file, 'application/vnd.oasis.opendocument.presentation')
+    expect(resolver.text.split.join(' ')).to include('The Title find me Slide two')
   end
 
   it 'Should extract text from .otp files' do
     file = File.new('spec/fixtures/files/presentation.otp', 'r')
 
-    expect(subject.text(file)).to match /The Title find me Slide two Click To Add Text/
-    expect(Plaintext::Resolver.new(file, 'application/vnd.oasis.opendocument.presentation-template').text).to(
-        match /The Title find me Slide two/
-    )
+    expect(subject.text(file).split.join(' ')).to include('The Title find me Slide two Click To Add Text')
+    
+    resolver = Plaintext::Resolver.new(file, 'application/vnd.oasis.opendocument.presentation-template')
+    expect(resolver.text.split.join(' ')).to include('The Title find me Slide two')
   end
 
   it 'Should extract text from .ods files' do
     file = File.new('spec/fixtures/files/spreadsheet.ods', 'r')
 
-    expect(subject.text(file)).to match /lorem ipsum/
-    expect(Plaintext::Resolver.new(file, 'application/vnd.oasis.opendocument.spreadsheet').text).to(
-        match /lorem ipsum fulltext find me!/
-    )
+    expect(subject.text(file).split.join(' ')).to include('lorem ipsum')
+    
+    resolver = Plaintext::Resolver.new(file, 'application/vnd.oasis.opendocument.spreadsheet')
+    expect(resolver.text.split.join(' ')).to include('lorem ipsum fulltext find me!')
   end
 
   it 'Should extract text from .ots files' do
     file = File.new('spec/fixtures/files/spreadsheet.ots', 'r')
 
-    expect(subject.text(file)).to match /lorem ipsum/
-    expect(Plaintext::Resolver.new(file, 'application/vnd.oasis.opendocument.spreadsheet-template').text).to(
-        match /lorem ipsum fulltext find me!/
-    )
+    expect(subject.text(file).split.join(' ')).to include('lorem ipsum')
+    
+    resolver = Plaintext::Resolver.new(file, 'application/vnd.oasis.opendocument.spreadsheet-template')
+    expect(resolver.text.split.join(' ')).to include('lorem ipsum fulltext find me!')
   end
 
   it 'Should only extract text up to given size limit' do
     file = File.new('spec/fixtures/files/spreadsheet.ots', 'r')
     expect(subject.text(file, max_size: 2)).to eq 'lo'
 
-    r = Plaintext::Resolver.new(file,
-                                'application/vnd.oasis.opendocument.spreadsheet')
+    r = Plaintext::Resolver.new(file, 'application/vnd.oasis.opendocument.spreadsheet')
     r.max_plaintext_bytes = 3
-    expect(r.text).to eq "lor"
+    expect(r.text).to eq 'lor'
   end
 
   it 'Should return a utf8 encoded string' do
     file = File.new('spec/fixtures/files/spreadsheet.ots', 'r')
     expect(subject.text(file).encoding.name).to eq 'UTF-8'
   end
-
 end

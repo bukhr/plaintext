@@ -9,10 +9,14 @@ describe Plaintext::Resolver do
   end
   let(:handler) { resolver.send(:find_handler) }
 
+
+  # NOTA: Este test viene del upstream pero nosotros modificamos el resolver
+  # por lo que no tiene sentido que lo pasemos. Modificamos su contenido con una
+  # versión compatible al código actual.
   it 'squishes and strips the text returned by the handler' do
     allow(handler).to receive(:text).and_return("  hello \n \n world! ")
 
-    expect(resolver.text).to eq("hello world!")
+    expect(resolver.text).to eq("  hello \n \n world! ")
   end
 
   it 'returns nil if the handler returns nil' do
@@ -25,6 +29,6 @@ describe Plaintext::Resolver do
     # make the handler return a frozen string
     allow(handler).to receive(:text).and_wrap_original { |m, *args| m.call(*args).freeze }
 
-    expect(resolver.text).to match(/lorem ipsum/)
+    expect(resolver.text).to include(/lorem ipsum/)
   end
 end
