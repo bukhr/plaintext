@@ -44,6 +44,11 @@ Or install it yourself as:
 In a Rails application save `plaintext.yml.example` in `config/plaintext.yml` and overwrite the settings to 
 your needs.
 
+Extraction commands are expected to write UTF-8 to STDOUT. Byte sequences that
+are not valid UTF-8 are replaced by a question mark, so make sure to pass
+whatever switch your command needs to produce UTF-8 — the defaults shipped with
+this gem already do.
+
 Then load that configuration file in an initializer. Add the following lines to `config/initializers/plaintext.rb`:
 
 ```ruby

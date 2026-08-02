@@ -3,8 +3,12 @@
 #
 # Text extraction helper programs.
 #
-# commands should write the resulting plain text to STDOUT. Use __FILE__ as
-# placeholder for the file path. The values below are the defaults.
+# commands should write the resulting plain text to STDOUT, encoded in UTF-8.
+# Use __FILE__ as placeholder for the file path. The values below are the
+# defaults.
+#
+# Byte sequences that are not valid UTF-8 are replaced by a question mark, so
+# make sure to pass whatever switch your command needs to produce UTF-8.
 
 # apt-get install poppler-utils
 # pdftotext:
@@ -15,8 +19,12 @@
 #   - '-'
 
 # apt-get install unrtf
+# unrtf has no switch to write UTF-8, its --text output is always Latin-1 and
+# is converted by the rtf handler. Replacing it with a command that does write
+# UTF-8 will garble accented characters.
 # unrtf:
 #   - /usr/bin/unrtf
+#   - --nopict
 #   - --text
 #   - __FILE__
 
@@ -37,5 +45,6 @@
 # apt-get install tesseract-ocr
 # tesseract:
 #   - /usr/bin/tesseract
-#   - -dutf-8
 #   - __FILE__
+#   - stdout
+#   - quiet

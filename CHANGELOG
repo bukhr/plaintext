@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+- Extracted text no longer has its non-ASCII characters replaced by question
+  marks. Command output was read as ASCII-8BIT no matter what the command
+  actually produced, and only the pdftotext handler was exempt, so umlauts and
+  accented characters from doc, xls, ppt, rtf and image files were destroyed.
+- Cutting the output at `max_plaintext_bytes` no longer corrupts the whole
+  text. A byte limit routinely cuts through a multi byte character; only that
+  character is replaced now instead of every non-ASCII character in the
+  document, and `Resolver#text` no longer raises `ArgumentError: invalid byte
+  sequence in UTF-8` in that case.
+- RTF files no longer lose their accented characters. unrtf cannot be told to
+  write UTF-8 — its `--text` output is always Latin-1 — so its output is
+  converted rather than expected to be UTF-8.
+- Corrected the unrtf and tesseract example configurations, which did not match
+  the defaults used by the gem.
+
 ## [0.3.7] - 2025-11-25
 
 ### Added

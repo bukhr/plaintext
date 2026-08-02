@@ -10,11 +10,5 @@ module Plaintext
       @content_type = 'application/pdf'
       @command = Plaintext::Configuration['pdftotext'] || DEFAULT
     end
-
-    protected
-
-    def utf8_stream?
-      true
-    end
   end
 end

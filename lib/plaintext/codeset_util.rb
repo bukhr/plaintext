@@ -17,8 +17,10 @@ module Plaintext
       else
         str.force_encoding('UTF-8')
         if !str.valid_encoding?
-          str = str.encode('US-ASCII', invalid: :replace,
-                           undef: :replace, replace: '?').encode('UTF-8')
+          # only replace the invalid byte sequences, leave the rest of the
+          # string alone. Reading up to a byte limit routinely cuts through a
+          # multi byte character at the very end of the string.
+          str = str.scrub('?')
         end
       end
       str

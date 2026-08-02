@@ -15,6 +15,13 @@ module Plaintext
     UNRTF_HEADER = "###  Translation from RTF performed by UnRTF"
     END_MARKER   = "-----------------\n"
 
+    # unrtf has no switch to make it write UTF-8: its --text output is always
+    # Latin-1, it ignores the locale, and it replaces anything it cannot map
+    # into Latin-1 with a question mark itself.
+    def output_encoding
+      'ISO-8859-1'
+    end
+
     def read(io, max_size = nil)
       if line = io.read(UNRTF_HEADER.length)
         string = if line.starts_with? UNRTF_HEADER
@@ -29,7 +36,7 @@ module Plaintext
             line[0,max_size]
           end
         end
-        Plaintext::CodesetUtil.to_utf8 string, "ASCII-8BIT"
+        Plaintext::CodesetUtil.to_utf8 string, output_encoding
       end
     end
   end

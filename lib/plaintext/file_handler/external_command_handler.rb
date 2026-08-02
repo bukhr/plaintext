@@ -13,12 +13,11 @@ module Plaintext
     require 'fileutils'
 
     FILE_PLACEHOLDER = '__FILE__'.freeze
-    DEFAULT_STREAM_ENCODING = 'ASCII-8BIT'.freeze
 
     def shellout(cmd, options = {}, &block)
       mode = "r+"
       IO.popen(cmd, mode) do |io|
-        set_stream_encoding(io)
+        io.binmode
         io.close_write unless options[:write_stdin]
         block.call(io) if block_given?
       end
@@ -43,32 +42,17 @@ module Plaintext
       new.available?
     end
 
-    protected
-
-    def utf8_stream?
-      false
-    end
-
     private
 
-    def set_stream_encoding(io)
-      return unless io.respond_to?(:set_encoding)
-
-      if utf8_stream?
-        io.set_encoding('UTF-8'.freeze)
-      else
-        io.set_encoding(DEFAULT_STREAM_ENCODING)
-      end
+    # Encoding the command writes its output in. Commands that can be told to
+    # produce UTF-8 are configured to do so (see plaintext.yml.example), the
+    # output of those that cannot is converted by #read.
+    def output_encoding
+      'UTF-8'
     end
 
     def read(io, max_size = nil)
-      piece = io.read(max_size)
-
-      if utf8_stream?
-        piece
-      else
-        Plaintext::CodesetUtil.to_utf8 piece, DEFAULT_STREAM_ENCODING
-      end
+      Plaintext::CodesetUtil.to_utf8 io.read(max_size), output_encoding
     end
   end
 end
