@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'timeout'
 
 describe Plaintext::RtfHandler do
 
@@ -62,6 +63,20 @@ describe Plaintext::RtfHandler do
         expect(subject.text(file, max_size: 50))
           .to eq 'lorem ipsum In der Küche hat es eine Kaffeemaschin'
         expect(subject.text(file, max_size: 5)).to eq 'lorem'
+      end
+    else
+      warn "#{described_class.name} could not be tested as /bin/cat is not available."
+    end
+  end
+
+  describe 'output with the unrtf header but no end marker' do
+    subject { passthrough_handler described_class }
+
+    if File.executable?('/bin/cat')
+      it 'Should stop at the end of the stream' do
+        file = File.new('spec/fixtures/files/unrtf-output-without-end-marker.txt', 'r')
+
+        expect(Timeout.timeout(10) { subject.text(file) }).to eq ''
       end
     else
       warn "#{described_class.name} could not be tested as /bin/cat is not available."

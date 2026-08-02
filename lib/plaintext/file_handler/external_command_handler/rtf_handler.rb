@@ -25,7 +25,7 @@ module Plaintext
     def read(io, max_size = nil)
       if line = io.read(UNRTF_HEADER.length)
         string = if line.starts_with? UNRTF_HEADER
-          io.gets while $_ != END_MARKER
+          io.each_line { |l| break if l == END_MARKER }
           io.read max_size
         else
           if max_size.nil?
