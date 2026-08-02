@@ -41,7 +41,7 @@ module Plaintext
         text = +text
         text.gsub!(/\s+/m, ' ')
         text.strip!
-        text.mb_chars.compose.limit(max_plaintext_bytes).to_s
+        text.unicode_normalize(:nfc).truncate_bytes(max_plaintext_bytes, omission: nil)
       end
     end
 

@@ -15,6 +15,21 @@ describe Plaintext::Resolver do
     expect(resolver.text).to eq("hello world!")
   end
 
+  it 'composes decomposed characters' do
+    # 'u' followed by a combining diaeresis
+    allow(handler).to receive(:text).and_return("In der Küche")
+
+    expect(resolver.text).to eq "In der Küche"
+  end
+
+  it 'limits the text to max_plaintext_bytes without splitting a character' do
+    allow(handler).to receive(:text).and_return("In der Küche")
+    resolver.max_plaintext_bytes = 9
+
+    # the 'ü' starts at byte 8 and would not fit into the limit
+    expect(resolver.text).to eq 'In der K'
+  end
+
   it 'returns nil if the handler returns nil' do
     allow(handler).to receive(:text).and_return(nil)
 
