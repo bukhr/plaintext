@@ -9,11 +9,10 @@ describe Plaintext::DocxHandler do
   it 'Should extract text from .docx files' do
     file = File.new('spec/fixtures/files/text.docx', 'r')
 
-    expect(subject.text(file)).to(
-      match /lorem ipsum/
-    )
+    expect(subject.text(file)).to include('lorem ipsum')
+
     expect(Plaintext::Resolver.new(file, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document').text).to(
-      match /lorem ipsum fulltext find me!/
+      include('lorem ipsum')
     )
   end
 

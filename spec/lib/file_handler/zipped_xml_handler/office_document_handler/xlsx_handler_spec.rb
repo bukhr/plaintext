@@ -9,10 +9,10 @@ describe Plaintext::XlsxHandler do
   it 'Should extract text from .xlsx files' do
     file = File.new('spec/fixtures/files/spreadsheet.xlsx', 'r')
 
-    expect(subject.text(file)).to match /lorem ipsum/
+    expect(subject.text(file).split.join(' ')).to include('lorem ipsum')
 
-    expect(Plaintext::Resolver.new(file, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet').text).to(
-        match /lorem ipsum fulltext find me!/
+    expect(Plaintext::Resolver.new(file, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet').text.split.join(' ')).to(
+      include('lorem ipsum fulltext find me!')
     )
   end
 end
