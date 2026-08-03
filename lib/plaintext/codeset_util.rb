@@ -4,24 +4,17 @@ module Plaintext
   module CodesetUtil
     def self.to_utf8(str, encoding)
       return str if str.nil?
-      str.force_encoding('ASCII-8BIT')
-      if str.empty?
-        str.force_encoding('UTF-8')
-        return str
-      end
-      enc = (encoding.nil? || encoding.size == 0) ? 'UTF-8' : encoding
+
+      enc = encoding.blank? ? 'UTF-8' : encoding
+      str.force_encoding(enc)
       if enc.upcase != 'UTF-8'
-        str.force_encoding(enc)
         str = str.encode('UTF-8', invalid: :replace,
                          undef: :replace, replace: '?')
-      else
-        str.force_encoding('UTF-8')
-        if !str.valid_encoding?
-          # only replace the invalid byte sequences, leave the rest of the
-          # string alone. Reading up to a byte limit routinely cuts through a
-          # multi byte character at the very end of the string.
-          str = str.scrub('?')
-        end
+      elsif !str.valid_encoding?
+        # only replace the invalid byte sequences, leave the rest of the
+        # string alone. Reading up to a byte limit routinely cuts through a
+        # multi byte character at the very end of the string.
+        str = str.scrub('?')
       end
       str
     end
