@@ -117,6 +117,12 @@ fulltext = Plaintext::Resolver.new(file, content_type).text
 To limit the number of bytes returned (default is 4MB), set the
 `max_plaintext_bytes` property on the resolver instance before calling `text`.
 
+All whitespace is collapsed into single spaces by default. To keep the line
+structure emitted by the extraction command instead, set `preserve_whitespace`
+on the resolver instance before calling `text`. That is the full document
+structure for PDF, RTF and plain text, while the handlers for the zipped XML
+formats join their text elements with a space.
+
 ## License
 
 The `plaintext` gem is free software; you can redistribute it and/or modify it under the terms of the GNU General 
