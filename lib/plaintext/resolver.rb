@@ -38,7 +38,9 @@ module Plaintext
       if handler = find_handler and
           text = handler.text(@file, max_size: max_plaintext_bytes)
 
-        text.mb_chars.compose.limit(max_plaintext_bytes).to_s
+        raise ArgumentError, 'max_plaintext_bytes must be non-negative' if max_plaintext_bytes < 0
+
+        text.unicode_normalize(:nfc).byteslice(0, max_plaintext_bytes).scrub('')
       end
     end
 

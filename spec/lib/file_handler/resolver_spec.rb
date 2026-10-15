@@ -31,4 +31,29 @@ describe Plaintext::Resolver do
 
     expect(resolver.text).to include(/lorem ipsum/)
   end
+  it 'normalizes decomposed text without calling mb_chars' do
+    text = +"Cafe\u0301"
+    allow(handler).to receive(:text).and_return(text)
+    expect(text).not_to receive(:mb_chars)
+
+    expect(resolver.text).to eq("Caf\u00e9")
+  end
+
+  it 'limits bytes without returning a partial Unicode character' do
+    allow(handler).to receive(:text).and_return("ab\u00e9\u{1f600}z")
+
+    { 0 => '', 1 => 'a', 3 => 'ab', 4 => "ab\u00e9", 7 => "ab\u00e9", 8 => "ab\u00e9\u{1f600}" }.each do |limit, expected|
+      resolver.max_plaintext_bytes = limit
+      expect(resolver.text).to eq(expected)
+      expect(resolver.text).to be_valid_encoding
+    end
+  end
+
+  it 'rejects a negative byte limit' do
+    allow(handler).to receive(:text).and_return('abc')
+    resolver.max_plaintext_bytes = -1
+
+    expect { resolver.text }.to raise_error(ArgumentError)
+  end
+
 end
