@@ -38,7 +38,8 @@ module Plaintext
       if handler = find_handler and
           text = handler.text(@file, max_size: max_plaintext_bytes)
 
-        text.mb_chars.compose.limit(max_plaintext_bytes).to_s
+        text = text.dup.force_encoding(Encoding::UTF_8) unless text.encoding == Encoding::UTF_8
+        text.unicode_normalize(:nfc).truncate_bytes(max_plaintext_bytes, omission: nil)
       end
     end
 
