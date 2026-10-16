@@ -25,6 +25,8 @@ as both systems tackle the identical challenge to extract plain text from attach
 
 ## Installation
 
+Requires ActiveSupport 6.0 or newer.
+
 Add this line to your application's Gemfile:
 
 ```ruby
@@ -111,6 +113,7 @@ fulltext = Plaintext::Resolver.new(file, content_type).text
 
 To limit the number of bytes returned (default is 4MB), set the
 `max_plaintext_bytes` property on the resolver instance before calling `text`.
+Text is normalized to NFC, and byte limits preserve complete grapheme clusters.
 
 ## License
 
